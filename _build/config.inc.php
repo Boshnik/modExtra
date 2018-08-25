@@ -25,6 +25,7 @@ return [
         'snippets' => true,
         'templates' => false,
         'widgets' => false,
+        'symlinks' => true,
     ],
     // Which elements should be static by default
     'static' => [
