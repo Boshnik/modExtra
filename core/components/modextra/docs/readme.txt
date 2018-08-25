@@ -1,7 +1,5 @@
 --------------------
 modExtra
 --------------------
-Author: John Doe <john@doe.com>
+Author: Aleksandr Huz <Superboshnik@gmail.com>
 --------------------
-
-A basic Extra for MODx Revolution.
