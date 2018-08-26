@@ -27,7 +27,7 @@ if ($transport->xpdo) {
                 'target' => $base . 'assets/components/modextra',
                 'production' => $assets . 'components/modextra/'    
             ],
-            'core_modtheme' => [
+            'core' => [
                 'target' => $base . 'core/components/modextra',
                 'production' => $core . 'components/modextra/'  
             ]
