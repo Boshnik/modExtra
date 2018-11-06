@@ -159,6 +159,7 @@ class modExtraPackage
             /** @var modSystemSetting $setting */
             $setting = $this->modx->newObject('modSystemSetting');
             $setting->fromArray(array_merge([
+                'name' => 'setting_' . $this->config['name_lower'] . '_' . $name,
                 'key' => $this->config['name_lower'] . '_' . $name,
                 'namespace' => $this->config['name_lower'],
             ], $data), '', true, true);
