@@ -616,20 +616,6 @@ class modExtraPackage
 
         // Add resolvers into vehicle
         $resolvers = scandir($this->config['resolvers']);
-        // Remove Office files
-        if (!in_array('office', $resolvers)) {
-            if ($cache = $this->modx->getCacheManager()) {
-                $dirs = [
-                    $this->config['assets'] . 'js/office',
-                    $this->config['core'] . 'controllers/office',
-                    $this->config['core'] . 'processors/office',
-                ];
-                foreach ($dirs as $dir) {
-                    $cache->deleteTree($dir, ['deleteTop' => true, 'skipDirs' => false, 'extensions' => []]);
-                }
-            }
-            $this->modx->log(modX::LOG_LEVEL_INFO, 'Deleted Office files');
-        }
         foreach ($resolvers as $resolver) {
             if (in_array($resolver[0], ['_', '.'])) {
                 continue;
