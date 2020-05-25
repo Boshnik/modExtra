@@ -107,37 +107,6 @@ class modExtraPackage
 
 
     /**
-     * Install nodejs and update assets
-     */
-    protected function assets()
-    {
-        $output = [];
-        if (!file_exists($this->config['build'] . 'node_modules')) {
-            putenv('PATH=' . trim(shell_exec('echo $PATH')) . ':' . dirname(MODX_BASE_PATH) . '/');
-            if (file_exists($this->config['build'] . 'package.json')) {
-                $this->modx->log(modX::LOG_LEVEL_INFO, 'Trying to install or update nodejs dependencies');
-                $output = [
-                    shell_exec('cd ' . $this->config['build'] . ' && npm config set scripts-prepend-node-path true && npm install'),
-                ];
-            }
-            if (file_exists($this->config['build'] . 'gulpfile.js')) {
-                $output = array_merge($output, [
-                    shell_exec('cd ' . $this->config['build'] . ' && npm link gulp'),
-                    shell_exec('cd ' . $this->config['build'] . ' && gulp copy'),
-                ]);
-            }
-            if ($output) {
-                $this->modx->log(xPDO::LOG_LEVEL_INFO, implode("\n", array_map('trim', $output)));
-            }
-        }
-        if (file_exists($this->config['build'] . 'gulpfile.js')) {
-            $output = shell_exec('cd ' . $this->config['build'] . ' && gulp default 2>&1');
-            $this->modx->log(xPDO::LOG_LEVEL_INFO, 'Compile scripts and styles ' . trim($output));
-        }
-    }
-
-
-    /**
      * Add settings
      */
     protected function settings()
@@ -586,7 +555,6 @@ class modExtraPackage
     public function process()
     {
         $this->model();
-        $this->assets();
 
         // Add elements
         $elements = scandir($this->config['elements']);
