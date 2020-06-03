@@ -2,7 +2,7 @@
 
 class modExtraItemGetListProcessor extends modObjectGetListProcessor
 {
-    public $objectType = 'modExtraItem';
+    public $objectType = 'modextra';
     public $classKey = 'modExtraItem';
     public $defaultSortField = 'id';
     public $defaultSortDirection = 'DESC';

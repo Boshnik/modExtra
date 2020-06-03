@@ -56,8 +56,11 @@ class modExtraHomeManagerController extends modExtraManagerController
         $this->addJavascript($this->modExtra->config['jsUrl'] . 'mgr/modextra.js');
         $this->addJavascript($this->modExtra->config['jsUrl'] . 'mgr/misc/utils.js');
         $this->addJavascript($this->modExtra->config['jsUrl'] . 'mgr/misc/combo.js');
-        $this->addJavascript($this->modExtra->config['jsUrl'] . 'mgr/widgets/items.grid.js');
-        $this->addJavascript($this->modExtra->config['jsUrl'] . 'mgr/widgets/items.windows.js');
+
+        // Item
+        $this->addJavascript($this->modExtra->config['jsUrl'] . 'mgr/widgets/item/grid.js');
+        $this->addJavascript($this->modExtra->config['jsUrl'] . 'mgr/widgets/item/windows.js');
+
         $this->addJavascript($this->modExtra->config['jsUrl'] . 'mgr/widgets/home.panel.js');
         $this->addJavascript($this->modExtra->config['jsUrl'] . 'mgr/sections/home.js');
 

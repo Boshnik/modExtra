@@ -2,25 +2,22 @@
 
 class modExtraItemUpdateProcessor extends modObjectUpdateProcessor
 {
-    public $objectType = 'modExtraItem';
+    public $objectType = 'modextra';
     public $classKey = 'modExtraItem';
     public $languageTopics = ['modextra'];
     //public $permission = 'save';
 
 
     /**
-     * We doing special check of permission
-     * because of our objects is not an instances of modAccessibleObject
-     *
-     * @return bool|string
+     * @return bool|null|string
      */
-    public function beforeSave()
+    public function initialize()
     {
         if (!$this->checkPermissions()) {
             return $this->modx->lexicon('access_denied');
         }
 
-        return true;
+        return parent::initialize();
     }
 
 

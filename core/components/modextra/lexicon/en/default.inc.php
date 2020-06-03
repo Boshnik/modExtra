@@ -19,6 +19,7 @@ $_lang['modextra_item_disable'] = 'Disable Item';
 $_lang['modextra_items_disable'] = 'Disable Items';
 $_lang['modextra_item_remove'] = 'Remove Item';
 $_lang['modextra_items_remove'] = 'Remove Items';
+$_lang['modextra_item_remove_title'] = 'Remove Item';
 $_lang['modextra_item_remove_confirm'] = 'Are you sure you want to remove this Item?';
 $_lang['modextra_items_remove_confirm'] = 'Are you sure you want to remove this Items?';
 

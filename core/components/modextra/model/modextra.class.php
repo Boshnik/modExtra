@@ -31,4 +31,19 @@ class modExtra
         $this->modx->lexicon->load('modextra:default');
     }
 
+    public function runProcessor($action = '', $data = array())
+    {
+        if (empty($action)) {
+            return false;
+        }
+        $this->modx->error->reset();
+        $processorsPath = !empty($this->config['processorsPath'])
+            ? $this->config['processorsPath']
+            : MODX_CORE_PATH . 'components/modextra/processors/';
+
+        return $this->modx->runProcessor($action, $data, array(
+            'processors_path' => $processorsPath,
+        ));
+    }
+
 }

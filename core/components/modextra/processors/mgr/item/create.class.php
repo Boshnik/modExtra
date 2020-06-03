@@ -2,7 +2,7 @@
 
 class modExtraItemCreateProcessor extends modObjectCreateProcessor
 {
-    public $objectType = 'modExtraItem';
+    public $objectType = 'modextra';
     public $classKey = 'modExtraItem';
     public $languageTopics = ['modextra'];
     //public $permission = 'create';

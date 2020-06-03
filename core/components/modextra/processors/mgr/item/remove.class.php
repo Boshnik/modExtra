@@ -1,8 +1,8 @@
 <?php
 
-class modExtraItemRemoveProcessor extends modObjectProcessor
+class modExtraItemRemoveProcessor extends modObjectRemoveProcessor
 {
-    public $objectType = 'modExtraItem';
+    public $objectType = 'modextra';
     public $classKey = 'modExtraItem';
     public $languageTopics = ['modextra'];
     //public $permission = 'remove';
@@ -11,27 +11,21 @@ class modExtraItemRemoveProcessor extends modObjectProcessor
     /**
      * @return array|string
      */
-    public function process()
+    public function initialize()
     {
         if (!$this->checkPermissions()) {
             return $this->failure($this->modx->lexicon('access_denied'));
         }
 
-        $ids = $this->modx->fromJSON($this->getProperty('ids'));
-        if (empty($ids)) {
-            return $this->failure($this->modx->lexicon('modextra_item_err_ns'));
-        }
-
-        foreach ($ids as $id) {
-            /** @var modExtraItem $object */
-            if (!$object = $this->modx->getObject($this->classKey, $id)) {
-                return $this->failure($this->modx->lexicon('modextra_item_err_nf'));
-            }
-
-            $object->remove();
-        }
-
-        return $this->success();
+        return parent::initialize();
+    }
+    
+    /**
+     * @return bool|string
+     */
+    public function beforeRemove()
+    {
+        return parent::beforeRemove();
     }
 
 }

@@ -8,15 +8,80 @@ modExtra.grid.Items = function (config) {
         fields: this.getFields(config),
         columns: this.getColumns(config),
         tbar: this.getTopBar(config),
-        sm: new Ext.grid.CheckboxSelectionModel(),
+        // sm: new Ext.grid.CheckboxSelectionModel(),
+        sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
         baseParams: {
-            action: 'mgr/item/getlist'
+            action: 'mgr/item/getlist',
+            sort: 'rank',
+            dir: 'asc',
         },
+        stateful: true,
+        stateId: config.id,
+        ddGroup: 'modextra-grid-statusDD',
+        ddAction: 'mgr/item/sort',
+        enableDragDrop: true,
+        multi_select: true,
         listeners: {
             rowDblClick: function (grid, rowIndex, e) {
                 var row = grid.store.getAt(rowIndex);
                 this.updateItem(grid, e, row);
-            }
+            },
+            render:{
+                scope: this,
+                fn: function(grid) {
+                    var grid = this;
+                    var el = grid.getEl();
+                    new Ext.dd.DropTarget(el, {
+                        ddGroup: grid.ddGroup,
+                        notifyDrop: function (dd, e, data) {
+                            var store = grid.getStore();
+                            var target = store.getAt(dd.getDragData(e).rowIndex);
+                            var sources = [];
+                            if (data.selections.length < 1 || data.selections[0].id == target.id) {
+                                return false;
+                            }
+                            for (var i in data.selections) {
+                                if (!data.selections.hasOwnProperty(i)) {
+                                    continue;
+                                }
+                                var row = data.selections[i];
+                                sources.push(row.id);
+                            }
+
+                            el.mask(_('loading'), 'x-mask-loading');
+                            MODx.Ajax.request({
+                                url: config.url,
+                                params: {
+                                    action: config.ddAction,
+                                    sources: Ext.util.JSON.encode(sources),
+                                    target: target.id,
+                                },
+                                listeners: {
+                                    success: {
+                                        fn: function () {
+                                            el.unmask();
+                                            grid.refresh();
+                                            if (typeof(grid.reloadTree) == 'function') {
+                                                sources.push(target.id);
+                                                grid.reloadTree(sources);
+                                            }
+                                        }, scope: grid
+                                    },
+                                    failure: {
+                                        fn: function () {
+                                            el.unmask();
+                                        }, scope: grid
+                                    },
+                                }
+                            });
+                        },
+                        notifyOver: function(dd, e, data) {
+                            var returnCls = this.dropAllowed;
+                            return returnCls;
+                        },
+                    });
+                },
+            },
         },
         viewConfig: {
             forceFit: true,
@@ -53,6 +118,34 @@ Ext.extend(modExtra.grid.Items, MODx.grid.Grid, {
         var menu = modExtra.utils.getMenu(row.data['actions'], this, ids);
 
         this.addContextMenuItem(menu);
+    },
+
+    statusAction: function (method) {
+        var ids = this._getSelectedIds();
+        if (!ids.length) {
+            return false;
+        }
+        MODx.Ajax.request({
+            url: modExtra.config.connector_url,
+            params: {
+                action: 'mgr/item/multiple',
+                method: method,
+                ids: Ext.util.JSON.encode(ids),
+            },
+            listeners: {
+                success: {
+                    fn: function () {
+                        //noinspection JSUnresolvedFunction
+                        this.refresh();
+                    }, scope: this
+                },
+                failure: {
+                    fn: function (response) {
+                        MODx.msg.alert(_('error'), response.message);
+                    }, scope: this
+                },
+            }
+        });
     },
 
     createItem: function (btn, e) {
@@ -113,72 +206,26 @@ Ext.extend(modExtra.grid.Items, MODx.grid.Grid, {
 
     removeItem: function () {
         var ids = this._getSelectedIds();
-        if (!ids.length) {
-            return false;
-        }
-        MODx.msg.confirm({
-            title: ids.length > 1
-                ? _('modextra_items_remove')
-                : _('modextra_item_remove'),
-            text: ids.length > 1
+
+        Ext.MessageBox.confirm(
+            _('modextra_item_remove_title'),
+            ids.length > 1
                 ? _('modextra_items_remove_confirm')
                 : _('modextra_item_remove_confirm'),
-            url: this.config.url,
-            params: {
-                action: 'mgr/item/remove',
-                ids: Ext.util.JSON.encode(ids),
-            },
-            listeners: {
-                success: {
-                    fn: function () {
-                        this.refresh();
-                    }, scope: this
+            function (val) {
+                if (val == 'yes') {
+                    this.statusAction('remove');
                 }
-            }
-        });
-        return true;
+            }, this
+        );
     },
 
     disableItem: function () {
-        var ids = this._getSelectedIds();
-        if (!ids.length) {
-            return false;
-        }
-        MODx.Ajax.request({
-            url: this.config.url,
-            params: {
-                action: 'mgr/item/disable',
-                ids: Ext.util.JSON.encode(ids),
-            },
-            listeners: {
-                success: {
-                    fn: function () {
-                        this.refresh();
-                    }, scope: this
-                }
-            }
-        })
+        this.statusAction('disable');
     },
 
     enableItem: function () {
-        var ids = this._getSelectedIds();
-        if (!ids.length) {
-            return false;
-        }
-        MODx.Ajax.request({
-            url: this.config.url,
-            params: {
-                action: 'mgr/item/enable',
-                ids: Ext.util.JSON.encode(ids),
-            },
-            listeners: {
-                success: {
-                    fn: function () {
-                        this.refresh();
-                    }, scope: this
-                }
-            }
-        })
+        this.statusAction('enable');
     },
 
     getFields: function () {

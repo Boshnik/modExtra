@@ -12,7 +12,7 @@ modExtra.window.CreateItem = function (config) {
         fields: this.getFields(config),
         keys: [{
             key: Ext.EventObject.ENTER, shift: true, fn: function () {
-                this.submit()
+                this.submit();
             }, scope: this
         }]
     });
@@ -22,6 +22,10 @@ Ext.extend(modExtra.window.CreateItem, MODx.Window, {
 
     getFields: function (config) {
         return [{
+            xtype: 'hidden',
+            name: 'id',
+            id: config.id + '-id',
+        },{
             xtype: 'textfield',
             fieldLabel: _('modextra_item_name'),
             name: 'name',
@@ -74,30 +78,7 @@ modExtra.window.UpdateItem = function (config) {
 Ext.extend(modExtra.window.UpdateItem, MODx.Window, {
 
     getFields: function (config) {
-        return [{
-            xtype: 'hidden',
-            name: 'id',
-            id: config.id + '-id',
-        }, {
-            xtype: 'textfield',
-            fieldLabel: _('modextra_item_name'),
-            name: 'name',
-            id: config.id + '-name',
-            anchor: '99%',
-            allowBlank: false,
-        }, {
-            xtype: 'textarea',
-            fieldLabel: _('modextra_item_description'),
-            name: 'description',
-            id: config.id + '-description',
-            anchor: '99%',
-            height: 150,
-        }, {
-            xtype: 'xcheckbox',
-            boxLabel: _('modextra_item_active'),
-            name: 'active',
-            id: config.id + '-active',
-        }];
+        return modExtra.window.CreateItem.prototype.getFields.call(this, config);
     },
 
     loadDropZones: function () {

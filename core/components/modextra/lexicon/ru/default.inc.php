@@ -19,6 +19,7 @@ $_lang['modextra_item_disable'] = 'Отключить Предмет';
 $_lang['modextra_items_disable'] = 'Отключить Предметы';
 $_lang['modextra_item_remove'] = 'Удалить Предмет';
 $_lang['modextra_items_remove'] = 'Удалить Предметы';
+$_lang['modextra_item_remove_title'] = 'Удалить Предмет';
 $_lang['modextra_item_remove_confirm'] = 'Вы уверены, что хотите удалить этот Предмет?';
 $_lang['modextra_items_remove_confirm'] = 'Вы уверены, что хотите удалить эти Предметы?';
 $_lang['modextra_item_active'] = 'Включено';
